@@ -35,13 +35,21 @@ app.get("/get-recipes", (req, res) => {
 
 app.post("/add-recipe", (req, res) => {
     const recipe = req.body;
-    db.collection('recipes')
-     .insertOne(req.body)
-     .then((result) => {
-        res.status(200).send(`"Recipe added successfully" ${result}`)
-     }).catch((err) => {
-        res.status(500).send(`Error: ${err}`)
-     })
+
+    const { title, description, ingredients, instructions, filename } = req.body;
+
+    if (!title || !description || !ingredients || !instructions || !filename) {
+      alert('Please fill in all required fields.');
+      return;
+    } else {
+        db.collection('recipes')
+        .insertOne(req.body)
+        .then((result) => {
+            res.status(200).send(`"Recipe added successfully" ${result}`)
+        }).catch((err) => {
+            res.status(500).send(`Error: ${err}`)
+        })
+    }
 })
 
 app.post("/delete-recipe", (req, res) => {
